@@ -11,11 +11,12 @@ import holoviews as hv
 import hvplot.pandas
 import seaborn as sns
 import os
+from decouple import config
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv()) # find_dotenv() method that will try to find a .env file 
 
 # Dataframe 
-googleSheetId=os.environ['STREAMLIT_googsheetid']
+googleSheetId=config('STREAMLIT_GOOGSHEETID') 
 workSheetName='Social media posts'
 URL=f'https://docs.google.com/spreadsheets/d/{googleSheetId}/gviz/tq?tqx=out:csv&sheet={workSheetName}'.replace(" ", "%20")
 
