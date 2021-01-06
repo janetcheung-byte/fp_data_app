@@ -33,8 +33,8 @@ def main():
 """
     )
     st.title('Welcome to FP Social Media Data Analysis')
-    st.write("Warning: Show dataframe option will take 3-5 minutes to run")
-
+    st.write("Note: The web app does run slow when you first open the link. It does run a little faster after it's done loading once.Show dataframe option will take 3-5 minutes to run")
+    st.write("Show dataframe option will take 3-5 minutes to run")
 
 if __name__ == "__main__":
     main()
