@@ -11,12 +11,12 @@ import holoviews as hv
 import hvplot.pandas
 import seaborn as sns
 import os
-from decouple import config
 from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv()) # find_dotenv() method that will try to find a .env file 
 
-# Dataframe 
-googleSheetId=config('STREAMLIT_GOOGSHEETID') 
+
+GITHUB_TOKEN = os.environ['GITHUB_TOKEN'] 
+googleSheetId=os.environ['STREAMLIT_GOOGSHEETID']
 workSheetName='Social media posts'
 URL=f'https://docs.google.com/spreadsheets/d/{googleSheetId}/gviz/tq?tqx=out:csv&sheet={workSheetName}'.replace(" ", "%20")
 
@@ -139,8 +139,10 @@ def dictValues():
 @st.cache
 def topPosts():
     df=get_data()
-    df2=df.drop_duplicates(['post id']).set_index('post id')
-   
+    df2=df.drop_duplicates(['post id']).copy()
+    df2["id_date"] = df.loc[:,"post id"].map(str) + ' ' + df.loc[:,"date"].map(str)
+    df2.set_index('id_date', inplace=True)
+    
     likes_posts = df2[['Likes on posts']].sort_values(by=['Likes on posts'], ascending=False)
     likes_shares = df2[['Likes on shares']].sort_values(by=['Likes on shares'], ascending=False)
     comments_posts = df2[['Comments on posts']].sort_values(by=['Comments on posts'], ascending=False)
