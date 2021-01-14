@@ -15,7 +15,7 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv()) # find_dotenv() method that will try to find a .env file 
 
 
-GITHUB_TOKEN = os.environ['GITHUB_TOKEN'] 
+ 
 googleSheetId=os.environ['STREAMLIT_GOOGSHEETID']
 workSheetName='Social media posts'
 URL=f'https://docs.google.com/spreadsheets/d/{googleSheetId}/gviz/tq?tqx=out:csv&sheet={workSheetName}'.replace(" ", "%20")
