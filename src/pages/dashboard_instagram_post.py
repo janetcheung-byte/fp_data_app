@@ -45,12 +45,7 @@ def write():
             st.write("Credits to Yao Zhong for the data analysis")
             
             
-        # Popular posts by post ids
-        if st.sidebar.checkbox('Show popular posts by id'):
-            plots = f.topPosts()
-            plot = st.selectbox("Select your chart.", list(plots.keys()))
-            'You selected: ', plot
-            st.write(hv.render(plots[plot].hvplot(kind='bar',x='id_date', stacked=True, rot=90, use_container_width=True, width=2000, height=1000), backend='bokeh'))# Visual graph
+
  
         # Options to show dataframe   
         if st.sidebar.checkbox('Show dataframe'):
