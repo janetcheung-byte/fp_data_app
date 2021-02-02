@@ -38,6 +38,14 @@ def write():
             dic = dict(zip(options, values))
             a=st.selectbox('Choose a post id', options, format_func=lambda x: dic[x])
             st.write(a)
+            
+         # Popular posts by post ids
+        if st.sidebar.checkbox('Show popular posts by id'):
+            plots = f.topPosts()
+            plot = st.selectbox("Select your chart.", list(plots.keys()))
+            'You selected: ', plot
+            st.write(hv.render(plots[plot].hvplot(kind='bar',x='id_date', stacked=True, rot=90, use_container_width=True, width=2000, height=1000), backend='bokeh'))# Visual graph
+            
 
         # Post average calculation visual graph
         if st.sidebar.checkbox('Show Post Average Calculation '):
@@ -45,11 +53,13 @@ def write():
             st.write("Credits to Yao Zhong for the data analysis")
             
             
-
  
         # Options to show dataframe   
         if st.sidebar.checkbox('Show dataframe'):
             st.dataframe(df.style.highlight_max(axis=0))
+            
+        
+       
 
 
            

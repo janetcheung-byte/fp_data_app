@@ -139,46 +139,196 @@ def dictValues():
 @st.cache
 def topPosts():
     df=get_data()
-    df2=df.drop_duplicates(['post id']).copy()
-    df2["id_date"] = df.loc[:,"post id"].map(str) + ' ' + df.loc[:,"date"].map(str)
-    df2.set_index('id_date', inplace=True)
     
-    likes_posts = df2[['Likes on posts']].sort_values(by=['Likes on posts'], ascending=False)
-    likes_shares = df2[['Likes on shares']].sort_values(by=['Likes on shares'], ascending=False)
-    comments_posts = df2[['Comments on posts']].sort_values(by=['Comments on posts'], ascending=False)
-    saves_posts = df2[['Saves on posts']].sort_values(by=['Saves on posts'], ascending=False)
-    engagements = df2[['Engagements (likes + comments + shares)']].sort_values(by=['Engagements (likes + comments + shares)'], ascending=False)
-    engagement_level= df2[['Engagement level (engagements / impressions)']].sort_values(by=['Engagement level (engagements / impressions)'], ascending=False)
-    reach = df2[['Reach (number of users)']].sort_values(by=['Reach (number of users)'], ascending=False)
-    comments_shares= df2[['Comments on shares']].sort_values(by=['Comments on shares'], ascending=False)
-    shares_posts = df2[['Shares on posts']].sort_values(by=['Shares on posts'], ascending=False)
-    shares_shares = df2[['Shares on shares']].sort_values(by=['Shares on shares'], ascending=False)
-    post_link_clicks = df2[['Post link clicks']].sort_values(by=['Post link clicks'], ascending=False)
-    post_unique_link_clicks = df2[['Post unique link clicks']].sort_values(by=['Post unique link clicks'], ascending=False)
-    post_other_clicks = df2[['Post other clicks']].sort_values(by=['Post other clicks'], ascending=False)
-    post_unique_other_clicks = df2[['Post unique other clicks']].sort_values(by=['Post unique other clicks'], ascending=False)
-    post_photo_views = df2[['Post photo views']].sort_values(by=['Post photo views'], ascending=False)
-    post_unique_photo_views = df2[['Post unique photo views']].sort_values(by=['Post unique photo views'], ascending=False)
-    total_post_reactions = df2[['Total post reactions']].sort_values(by=['Total post reactions'], ascending=False)
-    reactions_like = df2[['Post reactions: like']].sort_values(by=['Post reactions: like'], ascending=False)
-    reactions_love = df2[['Post reactions: love']].sort_values(by=['Post reactions: love'], ascending=False)
-    reactions_wow = df2[['Post reactions: wow']].sort_values(by=['Post reactions: wow'], ascending=False)
-    reactions_haha = df2[['Post reactions: haha']].sort_values(by=['Post reactions: haha'], ascending=False)
-    reactions_sad = df2[['Post reactions: sad']].sort_values(by=['Post reactions: sad'], ascending=False)
-    reactions_angry = df2[['Post reactions: angry']].sort_values(by=['Post reactions: angry'], ascending=False)
-    reactions_thankful = df2[['Post reactions: thankful']].sort_values(by=['Post reactions: thankful'], ascending=False)
-    reactions_pride = df2[['Post reactions: pride']].sort_values(by=['Post reactions: pride'], ascending=False)
-    video_views = df2[['Video views']].sort_values(by=['Video views'], ascending=False)
-    total_10s_views = df2[['Total 10s video views']].sort_values(by=['Total 10s video views'], ascending=False)
-    unique_video_views = df2[['Unique video views']].sort_values(by=['Unique video views'], ascending=False)
-    autoplay_views = df2[['Autoplay video views']].sort_values(by=['Autoplay video views'], ascending=False)
-    total_30s_views = df2[['Total 30s video views']].sort_values(by=['Total 30s video views'], ascending=False)
-    unique_30s_views = df2[['Unique 30s video views']].sort_values(by=['Unique 30s video views'], ascending=False)
-    autoplay_30s_views= df2[['Auto-played 30s video views']].sort_values(by=['Auto-played 30s video views'], ascending=False)
-    avg_video_viewtime = df2[['Avg. video view time (s)']].sort_values(by=['Avg. video view time (s)'], ascending=False)
-    post_exits = df2[['Post exits']].sort_values(by=['Post exits'], ascending=False)
-    taps_forward = df2[['Taps forward']].sort_values(by=['Taps forward'], ascending=False)
-    taps_back = df2[['Taps back']].sort_values(by=['Taps back'], ascending=False)
+    
+    likes_posts = df.groupby(['post id']).agg({'Likes on posts': max, 'date': max }).reset_index()
+    likes_posts ["id_date"] = likes_posts.loc[:,"post id"].map(str) + ' ' + likes_posts.loc[:,"date"].map(str)
+    likes_posts .set_index('id_date', inplace=True)
+    likes_posts .sort_values(by=['Likes on posts'], ascending=False, inplace=True)
+    
+    
+    likes_shares = df.groupby(['post id']).agg({'Likes on shares': max, 'date': max }).reset_index()
+    likes_shares ["id_date"] = likes_shares.loc[:,"post id"].map(str) + ' ' + likes_shares.loc[:,"date"].map(str)
+    likes_shares.set_index('id_date', inplace=True)
+    likes_shares.sort_values(by=['Likes on shares'], ascending=False, inplace=True)
+    
+    comments_posts = df.groupby(['post id']).agg({'Comments on posts': max, 'date': max }).reset_index()
+    comments_posts ["id_date"] = comments_posts.loc[:,"post id"].map(str) + ' ' + comments_posts.loc[:,"date"].map(str)
+    comments_posts.set_index('id_date', inplace=True)
+    comments_posts.sort_values(by=['Comments on posts'], ascending=False, inplace=True)
+    
+    saves_posts = df.groupby(['post id']).agg({'Saves on posts': max, 'date': max }).reset_index()
+    saves_posts ["id_date"] = saves_posts.loc[:,"post id"].map(str) + ' ' + saves_posts.loc[:,"date"].map(str)
+    saves_posts.set_index('id_date', inplace=True)
+    saves_posts.sort_values(by=['Saves on posts'], ascending=False, inplace=True) 
+    
+    engagements = df.groupby(['post id']).agg({'Engagements (likes + comments + shares)': max, 'date': max }).reset_index()
+    engagements ["id_date"] = engagements.loc[:,"post id"].map(str) + ' ' + engagements.loc[:,"date"].map(str)
+    engagements.set_index('Engagements (likes + comments + shares)', inplace=True)
+    engagements.sort_values(by=['Engagements (likes + comments + shares)'], ascending=False, inplace=True)
+    
+    
+    engagement_level = df.groupby(['post id']).agg({'Engagement level (engagements / impressions)': max, 'date': max }).reset_index()
+    engagement_level ["id_date"] = engagement_level.loc[:,"post id"].map(str) + ' ' + engagement_level.loc[:,"date"].map(str)
+    engagement_level.set_index('Engagement level (engagements / impressions)', inplace=True)
+    engagement_level.sort_values(by=['Engagement level (engagements / impressions)'], ascending=False, inplace=True)
+    
+   
+    reach = df.groupby(['post id']).agg({'Reach (number of users)': max, 'date': max }).reset_index()
+    reach ["id_date"] = reach.loc[:,"post id"].map(str) + ' ' + reach.loc[:,"date"].map(str)
+    reach.set_index('Reach (number of users)', inplace=True)
+    reach.sort_values(by=['Reach (number of users)'], ascending=False, inplace=True)
+    
+    comments_shares = df.groupby(['post id']).agg({'Comments on shares': max, 'date': max }).reset_index()
+    comments_shares ["id_date"] = comments_shares.loc[:,"post id"].map(str) + ' ' + comments_shares.loc[:,"date"].map(str)
+    comments_shares.set_index('Comments on shares', inplace=True)
+    comments_shares.sort_values(by=['Comments on shares'], ascending=False, inplace=True)
+    
+    shares_posts = df.groupby(['post id']).agg({'Shares on posts': max, 'date': max }).reset_index()
+    shares_posts ["id_date"] = shares_posts.loc[:,"post id"].map(str) + ' ' + shares_posts.loc[:,"date"].map(str)
+    shares_posts.set_index('Shares on posts', inplace=True)
+    shares_posts.sort_values(by=['Shares on posts'], ascending=False, inplace=True)
+    
+    shares_shares = df.groupby(['post id']).agg({'Shares on shares': max, 'date': max }).reset_index()
+    shares_shares ["id_date"] = shares_shares.loc[:,"post id"].map(str) + ' ' + shares_shares.loc[:,"date"].map(str)
+    shares_shares.set_index('Shares on shares', inplace=True)
+    shares_shares.sort_values(by=['Shares on shares'], ascending=False, inplace=True)
+    
+    post_link_clicks = df.groupby(['post id']).agg({'Post link clicks': max, 'date': max }).reset_index()
+    post_link_clicks ["id_date"] = post_link_clicks.loc[:,"post id"].map(str) + ' ' + post_link_clicks.loc[:,"date"].map(str)
+    post_link_clicks.set_index('Post link clicks', inplace=True)
+    post_link_clicks.sort_values(by=['Post link clicks'], ascending=False, inplace=True)
+    
+    post_unique_link_clicks = df.groupby(['post id']).agg({'Post link clicks': max, 'date': max }).reset_index()
+    post_unique_link_clicks ["id_date"] = post_unique_link_clicks.loc[:,"post id"].map(str) + ' ' + post_unique_link_clicks.loc[:,"date"].map(str)
+    post_unique_link_clicks.set_index('Post link clicks', inplace=True)
+    post_unique_link_clicks.sort_values(by=['Post link clicks'], ascending=False, inplace=True)
+    
+    post_other_clicks = df.groupby(['post id']).agg({'Post other clicks': max, 'date': max }).reset_index()
+    post_other_clicks ["id_date"] = post_other_clicks.loc[:,"post id"].map(str) + ' ' + post_other_clicks.loc[:,"date"].map(str)
+    post_other_clicks.set_index('Post other clicks', inplace=True)
+    post_other_clicks.sort_values(by=['Post other clicks'], ascending=False, inplace=True)
+    
+    post_unique_other_clicks = df.groupby(['post id']).agg({'Post unique other clicks': max, 'date': max }).reset_index()
+    post_unique_other_clicks ["id_date"] = post_unique_other_clicks.loc[:,"post id"].map(str) + ' ' + post_unique_other_clicks.loc[:,"date"].map(str)
+    post_unique_other_clicks.set_index('Post unique other clicks', inplace=True)
+    post_unique_other_clicks.sort_values(by=['Post unique other clicks'], ascending=False, inplace=True)
+    
+    post_photo_views = df.groupby(['post id']).agg({'Post photo views': max, 'date': max }).reset_index()
+    post_photo_views ["id_date"] = post_photo_views.loc[:,"post id"].map(str) + ' ' + post_photo_views.loc[:,"date"].map(str)
+    post_photo_views.set_index('Post photo views', inplace=True)
+    post_photo_views.sort_values(by=['Post photo views'], ascending=False, inplace=True)
+    
+    post_unique_photo_views = df.groupby(['post id']).agg({'Post unique photo views': max, 'date': max }).reset_index()
+    post_unique_photo_views ["id_date"] = post_unique_photo_views.loc[:,"post id"].map(str) + ' ' + post_unique_photo_views.loc[:,"date"].map(str)
+    post_unique_photo_views.set_index('Post unique photo views', inplace=True)
+    post_unique_photo_views.sort_values(by=['Post unique photo views'], ascending=False, inplace=True)
+    
+    total_post_reactions = df.groupby(['post id']).agg({'Total post reactions': max, 'date': max }).reset_index()
+    total_post_reactions ["id_date"] = total_post_reactions.loc[:,"post id"].map(str) + ' ' + total_post_reactions.loc[:,"date"].map(str)
+    total_post_reactions.set_index('Total post reactions', inplace=True)
+    total_post_reactions.sort_values(by=['Total post reactions'], ascending=False, inplace=True)
+    
+    reactions_like = df.groupby(['post id']).agg({'Post reactions: like': max, 'date': max }).reset_index()
+    reactions_like ["id_date"] = reactions_like.loc[:,"post id"].map(str) + ' ' + reactions_like.loc[:,"date"].map(str)
+    reactions_like.set_index('Post reactions: like', inplace=True)
+    reactions_like.sort_values(by=['Post reactions: like'], ascending=False, inplace=True)
+    
+    reactions_love = df.groupby(['post id']).agg({'Post reactions: love': max, 'date': max }).reset_index()
+    reactions_love ["id_date"] = reactions_love.loc[:,"post id"].map(str) + ' ' + reactions_love.loc[:,"date"].map(str)
+    reactions_love.set_index('Post reactions: love', inplace=True)
+    reactions_love.sort_values(by=['Post reactions: love'], ascending=False, inplace=True)
+    
+    reactions_wow = df.groupby(['post id']).agg({'Post reactions: wow': max, 'date': max }).reset_index()
+    reactions_wow ["id_date"] = reactions_wow.loc[:,"post id"].map(str) + ' ' + reactions_wow.loc[:,"date"].map(str)
+    reactions_wow.set_index('Post reactions: wow', inplace=True)
+    reactions_wow.sort_values(by=['Post reactions: wow'], ascending=False, inplace=True)
+     
+    reactions_haha = df.groupby(['post id']).agg({'Post reactions: haha': max, 'date': max }).reset_index()
+    reactions_haha ["id_date"] = reactions_haha.loc[:,"post id"].map(str) + ' ' + reactions_haha.loc[:,"date"].map(str)
+    reactions_haha.set_index('Post reactions: haha', inplace=True)
+    reactions_haha.sort_values(by=['Post reactions: haha'], ascending=False, inplace=True)
+                                                         
+                              
+    reactions_sad = df.groupby(['post id']).agg({'Post reactions: sad': max, 'date': max }).reset_index()
+    reactions_sad ["id_date"] = reactions_sad.loc[:,"post id"].map(str) + ' ' + reactions_sad.loc[:,"date"].map(str)
+    reactions_sad.set_index('Post reactions: sad', inplace=True)
+    reactions_sad.sort_values(by=['Post reactions: sad'], ascending=False, inplace=True)
+                                                          
+    reactions_angry = df.groupby(['post id']).agg({'Post reactions: angry': max, 'date': max }).reset_index()
+    reactions_angry ["id_date"] = reactions_angry.loc[:,"post id"].map(str) + ' ' + reactions_angry.loc[:,"date"].map(str)
+    reactions_angry.set_index('Post reactions: angry', inplace=True)
+    reactions_angry.sort_values(by=['Post reactions: angry'], ascending=False, inplace=True)
+                              
+    
+    reactions_thankful = df.groupby(['post id']).agg({'Post reactions: thankful': max, 'date': max }).reset_index()
+    reactions_thankful ["id_date"] = reactions_thankful.loc[:,"post id"].map(str) + ' ' + reactions_thankful.loc[:,"date"].map(str)
+    reactions_thankful.set_index('Post reactions: thankful', inplace=True)
+    reactions_thankful.sort_values(by=['Post reactions: thankful'], ascending=False, inplace=True)
+                                
+    reactions_pride = df.groupby(['post id']).agg({'Post reactions: pride': max, 'date': max }).reset_index()
+    reactions_pride ["id_date"] = reactions_pride.loc[:,"post id"].map(str) + ' ' + reactions_pride.loc[:,"date"].map(str)
+    reactions_pride.set_index('Post reactions: pride', inplace=True)
+    reactions_pride.sort_values(by=['Post reactions: pride'], ascending=False, inplace=True)
+                                                              
+    video_views = df.groupby(['post id']).agg({'Video views': max, 'date': max }).reset_index()
+    video_views ["id_date"] = video_views.loc[:,"post id"].map(str) + ' ' + video_views.loc[:,"date"].map(str)
+    video_views.set_index('Video views', inplace=True)
+    video_views.sort_values(by=['Video views'], ascending=False, inplace=True)
+                                                       
+    total_10s_views = df.groupby(['post id']).agg({'Video views': max, 'date': max }).reset_index()
+    total_10s_views ["id_date"] = total_10s_views.loc[:,"post id"].map(str) + ' ' + total_10s_views.loc[:,"date"].map(str)
+    total_10s_views.set_index('Video views', inplace=True)
+    total_10s_views.sort_values(by=['Video views'], ascending=False, inplace=True)
+                                                       
+    unique_video_views = df.groupby(['post id']).agg({'Unique video views': max, 'date': max }).reset_index()
+    unique_video_views ["id_date"] = unique_video_views.loc[:,"post id"].map(str) + ' ' + unique_video_views.loc[:,"date"].map(str)
+    unique_video_views.set_index('Unique video views', inplace=True)
+    unique_video_views.sort_values(by=['Unique video views'], ascending=False, inplace=True)
+                                                              
+    autoplay_views = df.groupby(['post id']).agg({'Autoplay video views': max, 'date': max }).reset_index()
+    autoplay_views ["id_date"] = autoplay_views.loc[:,"post id"].map(str) + ' ' + autoplay_views.loc[:,"date"].map(str)
+    autoplay_views.set_index('Autoplay video views', inplace=True)
+    autoplay_views.sort_values(by=['Autoplay video views'], ascending=False, inplace=True)
+                                                              
+    total_30s_views = df.groupby(['post id']).agg({'Total 30s video views': max, 'date': max }).reset_index()
+    total_30s_views ["id_date"] = total_30s_views.loc[:,"post id"].map(str) + ' ' + total_30s_views.loc[:,"date"].map(str)
+    total_30s_views.set_index('Total 30s video views', inplace=True)
+    total_30s_views.sort_values(by=['Total 30s video views'], ascending=False, inplace=True)
+                               
+                             
+    unique_30s_views = df.groupby(['post id']).agg({'Unique 30s video views': max, 'date': max }).reset_index()
+    unique_30s_views ["id_date"] = unique_30s_views.loc[:,"post id"].map(str) + ' ' + unique_30s_views.loc[:,"date"].map(str)
+    unique_30s_views.set_index('Unique 30s video views', inplace=True)
+    unique_30s_views.sort_values(by=['Unique 30s video views'], ascending=False, inplace=True)
+                                                           
+    autoplay_30s_views = df.groupby(['post id']).agg({'Auto-played 30s video views': max, 'date': max }).reset_index()
+    autoplay_30s_views ["id_date"] = autoplay_30s_views.loc[:,"post id"].map(str) + ' ' + autoplay_30s_views.loc[:,"date"].map(str)
+    autoplay_30s_views.set_index('Auto-played 30s video views', inplace=True)
+    autoplay_30s_views.sort_values(by=['Auto-played 30s video views'], ascending=False, inplace=True)
+                                                                 
+    avg_video_viewtime = df.groupby(['post id']).agg({'Avg. video view time (s)': max, 'date': max }).reset_index()
+    avg_video_viewtime ["id_date"] = avg_video_viewtime.loc[:,"post id"].map(str) + ' ' + avg_video_viewtime.loc[:,"date"].map(str)
+    avg_video_viewtime.set_index('Avg. video view time (s)', inplace=True)
+    avg_video_viewtime.sort_values(by=['Avg. video view time (s)'], ascending=False, inplace=True)
+                                   
+                              
+    post_exits = df.groupby(['post id']).agg({'Post exits': max, 'date': max }).reset_index()
+    post_exits ["id_date"] = post_exits.loc[:,"post id"].map(str) + ' ' + post_exits.loc[:,"date"].map(str)
+    post_exits.set_index('Post exits', inplace=True)
+    post_exits.sort_values(by=['Post exits'], ascending=False, inplace=True)
+                                                         
+    taps_forward = df.groupby(['post id']).agg({'Taps forward': max, 'date': max }).reset_index()
+    taps_forward ["id_date"] = taps_forward.loc[:,"post id"].map(str) + ' ' + taps_forward.loc[:,"date"].map(str)
+    taps_forward.set_index('Taps forward', inplace=True)
+    taps_forward.sort_values(by=['Taps forward'], ascending=False, inplace=True)
+                               
+                             
+    taps_back = df.groupby(['post id']).agg({'Taps back': max, 'date': max }).reset_index()
+    taps_back ["id_date"] = taps_back.loc[:,"post id"].map(str) + ' ' + taps_back.loc[:,"date"].map(str)
+    taps_back.set_index('Taps back', inplace=True)
+    taps_back.sort_values(by=['Taps back'], ascending=False, inplace=True)
+                             
     return {"Likes on posts": likes_posts,
     "Likes on shares": likes_shares,
     'Comments on posts':comments_posts, 
@@ -215,7 +365,6 @@ def topPosts():
     'Post exits':post_exits,
     'Taps forward':taps_forward, 
     'Taps back':taps_back}
-
 
 @st.cache
 def df_forIdContentLookup():
@@ -297,3 +446,13 @@ def postAvg():
        'Unique video views', 'id_count'])
     return postavg
 
+@st.cache()
+def pctChange():
+    insta5=df.loc[df['social media'] == 'instagram']
+    insta5=insta5[['Likes on posts','post id','date']].copy()
+    insta5=insta5.pivot_table(index=['post id','date'])
+    insta5['pct_change']=insta5['Likes on posts'].pct_change()*100
+    insta5.dropna(inplace=True)
+    insta5[['pct_change']]
+    plot=insta5[['pct_change']]
+    return plot
